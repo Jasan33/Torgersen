@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+}
+
+.content {
+    background-color: rgb(238, 66, 66);
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+    font-family: 'Gill Sans'; 
+    padding: 1.5%;
+    color: aliceblue;
+    background-color: brown;
+}
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    font-size: 25px;
+    font-family: 'Gill Sans'; 
+    padding: 1%;
+    color: aliceblue;
+    background-color: brown;
+}
