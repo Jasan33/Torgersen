@@ -18,12 +18,12 @@
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
     </div>
     <div class="login_and_register_main">
-        <h1>Login to experience 100%</h1>
+        <h1>Login for å bestille kunnskap</h1>
         <form action="{{ url_for('login') }}" method="POST" class="login_and_register_form">
-            <label for="username">Username:</label>
-            <input class="height" type="text" id="username" name="username" required><br>
-            <label for="password">Password:</label>
-            <input class="height" type="password" id="password" name="password" required><br>
+            <label for="navn">navn:</label>
+            <input class="height" type="text" id="navn" name="navn" required><br>
+            <label for="passord">passord:</label>
+            <input class="height" type="password" id="passord" name="passord" required><br>
             <button class="submit_button" type="submit">Login</button>
         </form>
         <a href="{{ url_for('register') }}">Don't have an account!?</a>
