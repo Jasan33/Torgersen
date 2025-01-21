@@ -2,9 +2,10 @@
     margin: 0;
 }
 
-.content {
-    background-color: rgb(238, 66, 66);
-}
+a {
+    text-decoration: none; /* removes underline to links */
+    color: rgb(255, 255, 255);
+  }
 
 .navbar {
     display: flex;
@@ -24,4 +25,16 @@
     padding: 1%;
     color: aliceblue;
     background-color: brown;
+}
+
+.Top_ti {
+    margin: 2%;
+}
+
+.bokker {
+    display: flex;
+    width: 200px;
+    height: 400px;
+    gap: 30%;
+    margin-top: 10px;
 }
