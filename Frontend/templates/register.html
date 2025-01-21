@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torgersen offcial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Vellkommen til Torgersen bibliotek</h1>
+    </div>
+    <div class="header">
+        <a href="{{ url_for('index') }}"><p>Forsiden</p></a>
+        <a href="{{ url_for('register') }}"><p>Login/signup</p></a>
+        <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
+        <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
+    </div>
+    <div class="login_and_register_main">
+        <h1>Registerer deg her for å bestille bøkker</h1>
+        <form action="{{ url_for('register') }}" method="POST" class="login_and_register_form">
+            <label for="username">Full navn og etternavn:</label>
+            <input class="height" type="text" id="username" name="username" required><br>
+            <label for="password">Passord:</label>
+            <input class="height" type="password" id="password" name="password" required><br>
+            <label for="confirm_password">bekreft Passord:</label>
+            <input class="height" type="password" id="confirm_password" name="confirm_password" required><br>
+            <label for="email">Epost:</label>
+            <input class="height" type="email" id="email" name="email" required><br>
+            <button class="submit_button" type="submit">Registerer nå!</button>
+            <script>
+                const form = document.querySelector("form");
+                const password = document.getElementById("password");
+                const confirmPassword = document.getElementById("confirm_password");
+        
+                form.addEventListener("submit", (e) => {
+                    if (password.value !== confirmPassword.value) {
+                        e.preventDefault();
+                        alert("Passord");
+                    }
+                });
+            </script>
+        </form>
+        <button><a href="{{ url_for('login') }}">allerede en medlem?</a></button>
+    </div>
+</body>
+</html>
