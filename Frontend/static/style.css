@@ -38,3 +38,9 @@ a {
     gap: 30%;
     margin-top: 10px;
 }
+
+.bestill  {
+    display: flex;
+    position: absolute;
+    gap: 100px;
+}
