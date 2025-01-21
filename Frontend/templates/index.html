@@ -9,22 +9,37 @@
 <body>
     <div class="navbar">
         <h1>Vellkommen til Torgersen bibliotek</h1>
+        {% if navn %}
+        &nbsp; {{ navn }}!
+        {% else %}
+        {% endif %}
     </div>
     <div class="header">
         <a href="{{ url_for('index') }}"><p>Forsiden</p></a>
-        <a href="{{ url_for('register') }}"><p>Login/signup</p></a>
+            {% if navn %}
+            <a href="{{ url_for('logout') }}">log ut!</a>
+            {% else %}
+            <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
+            {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
         <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
+        {% if admin %}
+        <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
+        {% else %}
+        {% endif %}
     </div>
-    <div class="content">
+    <div class="content">   
         <div class="Top_ti">
-            <h1 class="toptekst">Top 10 bøker!</h1>
+            <h1 class="toptekst">Top 5 populære bøker!</h1>
             <div class="bokker">
                 <img src="{{ url_for('static', filename='images/Lokalhistoien.png') }}" alt="book en">
-                <img src="{{ url_for('static', filename='images/hjemme.png') }}" alt="book to">
+                <img src="{{ url_for('static', filename='images/bamse.png') }}" alt="book to">
+                <img src="{{ url_for('static', filename='images/hjemme.png') }}" alt="book tre">
+                <img src="{{ url_for('static', filename='images/ferie.png') }}" alt="book fire">
+                <img src="{{ url_for('static', filename='images/hytteliv2015.png') }}" alt="book fem">
             </div>
         </div>
     </div>
 </body>
-</html>
+</html> 

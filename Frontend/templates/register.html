@@ -17,6 +17,15 @@
         <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
     </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
     <div class="login_and_register_main">
         <h1>Registerer deg her for å bestille bøkker</h1>
         <form action="{{ url_for('register') }}" method="POST" class="login_and_register_form">
