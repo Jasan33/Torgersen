@@ -26,11 +26,23 @@ AES_KEY = os.getenv("AES_KEY")
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    navn = session.get('navn')  # Safely get 'navn' from session, default is None
+    admin = session.get('admin')  # Safely get 'navn' from session, default is None
+    cur = mysql.connection.cursor()  # Open a cursor object to interact with the database
+    cur.execute("SELECT navn FROM brukere")
+    folk = cur.fetchall()  # Fetch all rows as a list
+    cur.close()  # Close the database cursor to free resources
+    return render_template('index.html', folk=folk, navn=navn, admin=admin)
 
-@app.route("/index.html")
+@app.route("/index")
 def index():
-    return render_template("index.html")
+    navn = session.get('navn')  # Safely get 'navn' from session, default is None
+    cur = mysql.connection.cursor()  # Open a cursor object to interact with the database
+    cur.execute("SELECT navn FROM brukere")
+    folk = cur.fetchall()  # Fetch all rows as a list
+    cur.close()  # Close the database cursor to free resources
+    
+    return render_template('index.html', folk=folk, navn=navn)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -40,7 +52,7 @@ def register():
         epost = request.form['epost']
         passord = request.form['passord']
         bekreft_passord = request.form['bekreft_passord']
-        
+         
         # Checks if the passwords matchs
         if passord != bekreft_passord:
             flash("Passordet og bekreft passord ligner ikke hverandre, vær så snill prøv igjen")
@@ -60,30 +72,46 @@ def register():
 
     return render_template('register.html')
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         navn = request.form['navn']
         passord = request.form['passord']
 
+        # Fetch the user from the database
         cur = mysql.connection.cursor()
         cur.execute("""
-            SELECT id, navn, AES_DECRYPT(passord, %s)
+            SELECT id, navn, AES_DECRYPT(password, %s), role
             FROM brukere
             WHERE navn = %s
         """, (AES_KEY, navn))
-        brukere = cur.fetchone() # finner den første brukeren som macher med navnet
+        bruker = cur.fetchone()  # Fetch the first user that matches
         cur.close()
 
-        if brukere and brukere[2].decode('utf-8') == passord:  # dekrypterer og sammenligner passord
-            session['user_id'] = brukere[0]
-            session['navn'] = brukere[1]  # Setter bruker i session for 24 timer så man slipper å logge in
-            flash("suksess, velkommen", navn)
+        # Verify the user's password
+        if bruker and bruker[2].decode('utf-8') == passord:  # Decrypt and compare password
+            session['user_id'] = bruker[0]
+            session['navn'] = bruker[1]  # Store user name in session
+            session['role'] = bruker[3]  # Store user role in session
+
+            if bruker[3] == 'admin':  # Check if the user is an admin
+                session['admin'] = True
+                flash(f"Velkommen, {bruker[1]}! Du er logget inn som admin.")
+            else:
+                session['admin'] = False
+                flash(f"Velkommen, {bruker[1]}!")
+
             return redirect(url_for('home'))
         else:
-            flash("Feil innloggings matterial, venligst prøv igjen")
-    
+            flash("Feil innloggingsdetaljer, vennligst prøv igjen.")
     return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    session.clear()  # Clear all session data
+    flash("You have been logged out!")
+    return redirect(url_for('home'))
 
 @app.route("/bestiling")
 def bestiling():
@@ -105,6 +133,11 @@ def tabel():
     people = cur.fetchall() # Gets all rows as a list
     cur.close() # closes the database to free resources
     return render_template('tabel.html', people=people, username=username)
+
+
+@app.route("/Admin")
+def Admin():
+    return render_template("Admin.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
