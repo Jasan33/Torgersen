@@ -9,12 +9,12 @@ load_dotenv()
 
 app = Flask(
     __name__,
-    template_folder="../Frontend/templates",  # Path vei til templates
-    static_folder="../Frontend/static"        # Path vei til static
+    template_folder="../Frontend/templates",  # Fil vei til templates
+    static_folder="../Frontend/static"        # Fil vei til static
 )
 app.secret_key = os.getenv("SECRET_KEY")
 
-# Mysql konfigurasjoner for database
+# Mysql konfigurasjoner for databasen
 app.config['MYSQL_HOST'] = os.getenv("HOST")
 app.config['MYSQL_USER'] = os.getenv("USER")
 app.config['MYSQL_PASSWORD'] = os.getenv("PASSWORD")
@@ -26,44 +26,45 @@ AES_KEY = os.getenv("AES_KEY")
 
 @app.route("/")
 def home():
-    navn = session.get('navn')  # Safely get 'navn' from session, default is None
-    admin = session.get('admin')  # Safely get 'navn' from session, default is None
-    cur = mysql.connection.cursor()  # Open a cursor object to interact with the database
+    navn = session.get('navn')  # Henter navn fra session (0 vis den ikke finner)
+    admin = session.get('admin')  # finner fram admin fra seassion, har man en bruker kan man være admin
+    cur = mysql.connection.cursor()  # Et "cursor connector" som kobler til databasen
     cur.execute("SELECT navn FROM brukere")
-    folk = cur.fetchall()  # Fetch all rows as a list
-    cur.close()  # Close the database cursor to free resources
+    folk = cur.fetchall()  # Fetcher (henter) alle rader som en liste
+    cur.close()  # lukker databsen etter bruke for å spare resurrser
     return render_template('index.html', folk=folk, navn=navn, admin=admin)
 
 @app.route("/index")
 def index():
-    navn = session.get('navn')  # Safely get 'navn' from session, default is None
-    cur = mysql.connection.cursor()  # Open a cursor object to interact with the database
+    navn = session.get('navn')
+    admin = session.get('admin') 
+    cur = mysql.connection.cursor()
     cur.execute("SELECT navn FROM brukere")
-    folk = cur.fetchall()  # Fetch all rows as a list
-    cur.close()  # Close the database cursor to free resources
+    folk = cur.fetchall() 
+    cur.close()
     
-    return render_template('index.html', folk=folk, navn=navn)
+    return render_template('index.html', folk=folk, navn=navn, admin=admin)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # sjekker vis brukeren har sent in en form, her feacher den
+        # sjekker vis brukeren har sent in en form, vis ja da for den følgende informasjon
         navn = request.form['navn']
         epost = request.form['epost']
         passord = request.form['passord']
         bekreft_passord = request.form['bekreft_passord']
          
-        # Checks if the passwords matchs
+        # sjekker vis passored macher med det krypterte
         if passord != bekreft_passord:
-            flash("Passordet og bekreft passord ligner ikke hverandre, vær så snill prøv igjen")
+            flash("Passordet ligner ikke hverandre, vær så snill og prøv igjen")
             return render_template('register.html')
 
-        # Adds the user to redtype's database
+        # Legger til brukeren i databasen
         cur = mysql.connection.cursor()
         cur.execute("""
             INSERT INTO brukere (navn, epost, password)
             VALUES (%s, %s, AES_ENCRYPT(%s, %s))
-        """, (navn, epost, passord, AES_KEY))
+        """, (navn, epost, passord, AES_KEY)) # %S er values etter navn, epost, passord og enkrypt key
         mysql.connection.commit()
         cur.close()
         
@@ -78,23 +79,23 @@ def login():
         navn = request.form['navn']
         passord = request.form['passord']
 
-        # Fetch the user from the database
+        # Henter eller finner brukeren fra databasen
         cur = mysql.connection.cursor()
         cur.execute("""
             SELECT id, navn, AES_DECRYPT(password, %s), role
             FROM brukere
             WHERE navn = %s
         """, (AES_KEY, navn))
-        bruker = cur.fetchone()  # Fetch the first user that matches
+        bruker = cur.fetchone()  # Finner den første medlemen som kyttes til navnet
         cur.close()
 
-        # Verify the user's password
-        if bruker and bruker[2].decode('utf-8') == passord:  # Decrypt and compare password
+        # bekreft og sjekk brukerens passord
+        if bruker and bruker[2].decode('utf-8') == passord: 
             session['user_id'] = bruker[0]
-            session['navn'] = bruker[1]  # Store user name in session
-            session['role'] = bruker[3]  # Store user role in session
+            session['navn'] = bruker[1]  # Setter in navn i session 
+            session['role'] = bruker[3]  # setter in rolen man har i session ("admin" eller "user")
 
-            if bruker[3] == 'admin':  # Check if the user is an admin
+            if bruker[3] == 'admin':  # sjekk vis brukeren er admin
                 session['admin'] = True
                 flash(f"Velkommen, {bruker[1]}! Du er logget inn som admin.")
             else:
@@ -109,35 +110,49 @@ def login():
 
 @app.route("/logout")
 def logout():
-    session.clear()  # Clear all session data
-    flash("You have been logged out!")
+    session.clear() 
+    flash("Nå er du logget ut!, takk for besøket")
     return redirect(url_for('home'))
 
 @app.route("/bestiling")
 def bestiling():
-    return render_template("bestiling.html")
+    navn = session.get('navn')
+    admin = session.get('admin')
+
+    return render_template("bestiling.html", navn=navn, admin=admin)
 
 @app.route("/om_oss")
 def om_oss():
-    return render_template("om_oss.html")
+    navn = session.get('navn')
+    admin = session.get('admin')
+
+    return render_template("om_oss.html", navn=navn, admin=admin)
 
 @app.route("/tabel")
 def tabel():
-    if 'username' not in session:
+    if 'navn' not in session:
         flash("Vær så snill og login eller register deg før du ser denne siden, den er sensetiv.")
         return redirect(url_for('login'))
     
-    username = session['username']
-    cur = mysql.connection.cursor() # Opens a cursor object to interact with the database.
-    cur.execute("SELECT username, level, total_words FROM user ORDER BY total_words DESC")
-    people = cur.fetchall() # Gets all rows as a list
-    cur.close() # closes the database to free resources
-    return render_template('tabel.html', people=people, username=username)
+    navn = session.get('navn')
+    admin = session.get('admin')
+    return render_template('tabel.html', navn=navn, admin=admin)
 
 
 @app.route("/Admin")
 def Admin():
-    return render_template("Admin.html")
+    if 'admin' not in session:
+        flash("Dette er sensetiv informasjon, vis du ikke er admin kan du ikke se dette.")
+        return redirect(url_for('home'))
+    
+    navn = session.get('navn')
+    admin = session.get('admin')
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id, navn, epost, role FROM brukere")
+    folk = cur.fetchall()
+    cur.close()
+    
+    return render_template("Admin.html", folk=folk, navn=navn, admin=admin)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

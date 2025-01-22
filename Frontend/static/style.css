@@ -44,3 +44,15 @@ a {
     position: absolute;
     gap: 100px;
 }
+
+.Adminboard {
+    margin: 2%;
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login_button {
+    color: black;
+}
