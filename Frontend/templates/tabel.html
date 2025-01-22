@@ -9,14 +9,39 @@
 <body>
     <div class="navbar">
         <h1>Vellkommen til Torgersen bibliotek</h1>
+        {% if navn %}
+        &nbsp; {{ navn }}!
+        {% else %}
+        {% endif %}
     </div>
     <div class="header">
         <a href="{{ url_for('index') }}"><p>Forsiden</p></a>
-        <a href="{{ url_for('register') }}"><p>Login/signup</p></a>
+            {% if navn %}
+            <a href="{{ url_for('logout') }}">log ut!</a>
+            {% else %}
+            <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
+            {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
-        <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
+        {% if admin %}
+        <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
+        {% else %}
+        {% endif %}
     </div>
-    <h1>Her er alle våre medlemmer</h1>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
+    <h1>Her kan du legge igjen en eller flere Annmeldelser/ønsker</h1>
+    <div class="content_annmeldelser">
+      <p>Ønsker du at noe skulle være anderledes her oss hos?</p>
+      <input type="text">
+    </div>
 </body>
 </html>

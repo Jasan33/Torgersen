@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torgersen offcial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Vellkommen til Torgersen bibliotek</h1>
+        {% if navn %}
+        &nbsp; {{ navn }}!
+        {% else %}
+        {% endif %}
+    </div>
+    <div class="header">
+        <a href="{{ url_for('index') }}"><p>Forsiden</p></a>
+            {% if navn %}
+            <a href="{{ url_for('logout') }}">log ut!</a>
+            {% else %}
+            <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
+            {% endif %}
+        <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
+        <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
+        {% if admin %}
+        <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
+        {% else %}
+        {% endif %}
+    </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
+    <div class="main_adminboard">
+      <!-- For alle navn i listen folk så skal informasjonen id, navn, epost og rolle visses  -->
+      {% for navn in folk %}
+      <hr>
+      <div class="Adminboard">
+          <p>ID: {{ navn[0] }}</p>
+          <p>Navn: {{ navn[1] }}</p>
+          <p>Epost: {{ navn[2] }}</p>
+          <p>Rolle: {{ navn[3] }}</p>
+      </div>
+      {% endfor %}
+      <hr>
+  </div>
+</body>
+</html>

@@ -9,6 +9,7 @@
 <body>
     <div class="navbar">
         <h1>Vellkommen til Torgersen bibliotek</h1>
+        <!-- if else statement for vis brukeren er logget in -->
         {% if navn %}
         &nbsp; {{ navn }}!
         {% else %}
@@ -22,13 +23,23 @@
             <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
             {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
-        <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
         {% if admin %}
+        <!-- vis du har admin for du tilgang til denne siden -->
         <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
         {% else %}
         {% endif %}
     </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
     <div class="content">   
         <div class="Top_ti">
             <h1 class="toptekst">Top 5 populære bøker!</h1>
@@ -42,4 +53,4 @@
         </div>
     </div>
 </body>
-</html> 
+</html>

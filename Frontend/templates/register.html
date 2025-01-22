@@ -9,13 +9,25 @@
 <body>
     <div class="navbar">
         <h1>Vellkommen til Torgersen bibliotek</h1>
+        {% if navn %}
+        &nbsp; {{ navn }}!
+        {% else %}
+        {% endif %}
     </div>
     <div class="header">
         <a href="{{ url_for('index') }}"><p>Forsiden</p></a>
-        <a href="{{ url_for('register') }}"><p>Login/signup</p></a>
+            {% if navn %}
+            <a href="{{ url_for('logout') }}">log ut!</a>
+            {% else %}
+            <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
+            {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
-        <a href="{{ url_for('tabel') }}"><p>Tabel</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
+        {% if admin %}
+        <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
+        {% else %}
+        {% endif %}
     </div>
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
@@ -25,7 +37,8 @@
         {% endfor %}
       </ul>
     {% endif %}
-  {% endwith %}
+    {% endwith %}
+        <!-- Form som sammler data til backend vis det er riktig -->
     <div class="login_and_register_main">
         <h1>Registerer deg her for å bestille bøkker</h1>
         <form action="{{ url_for('register') }}" method="POST" class="login_and_register_form">
@@ -38,6 +51,7 @@
             <label for="epost">Epost:</label>
             <input class="height" type="email" id="epost" name="epost" required><br>
             <button class="submit_button" type="submit">Registerer nå!</button>
+            <!-- en kort script som sammenligner passord med bekreft passord -->
             <script>
                 const form = document.querySelector("form");
                 const password = document.getElementById("passord");
