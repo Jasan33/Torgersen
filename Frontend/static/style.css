@@ -56,3 +56,43 @@ a {
 .login_button {
     color: black;
 }
+
+.login_and_register_main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Gill Sans';
+    font-size: 20px;
+    margin-top: 40px;
+}
+
+.titele_login {
+    margin-bottom: 20px;
+}
+
+.height {
+    display: flex;
+    flex-direction: column;
+    height: 30px;
+    font-size: 20px;
+}
+
+.submit_button {
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+    color: black;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.flashes {
+    font-family: sans-serif;
+    text-align: center;
+    color: aliceblue;
+    font-size: 25px;
+    border: solid 5px;
+    padding: 10px;
+    background-color: rgb(255, 166, 0);
+    border-color: rgba(255, 255, 0, 0.552);
+}
