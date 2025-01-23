@@ -22,7 +22,7 @@
             <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
             {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
-        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
+        <a href="{{ url_for('arbeid') }}"><p>Arbeid</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
         {% if admin %}
         <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
@@ -38,10 +38,22 @@
       </ul>
     {% endif %}
     {% endwith %}
-    <h1>Her kan du legge igjen en eller flere Annmeldelser/ønsker</h1>
-    <div class="content_annmeldelser">
-      <p>Ønsker du at noe skulle være anderledes her oss hos?</p>
-      <input type="text">
+        <!-- Her kan en bruker skrive inn arbeid de ønsker -->
+    <div class="valg">
+        <button><a class="submit_button" href="{{ url_for('arbeid') }}">Skriv en arbeid</a></button>
+        <button><a class="submit_button" href="{{ url_for('searbeid') }}">Se arbeid</a></button>
+    </div>
+    <div class="login_and_register_main">
+        <h1 class="titele_login">Her kan du oppgi et arbeid som du ønsker, svar på skjema under</h1>
+        <form action="{{ url_for('arbeid') }}" method="POST" class="login_and_register_form">
+            <label for="navn">Full navn og etternavn:</label>
+            <input class="height" type="text" id="navn" name="navn" required><br>
+            <label for="passord">Passord:</label>
+            <input class="height" type="password" id="passord" name="passord" required><br>
+            <label for="message">arbeid (380 tegn max):</label>
+            <input class="height" type="text" id="message" name="message" required><br>
+            <button class="submit_button" type="submit">send inn</button>
+        </form>
     </div>
 </body>
 </html>

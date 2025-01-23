@@ -128,15 +128,55 @@ def om_oss():
 
     return render_template("om_oss.html", navn=navn, admin=admin)
 
-@app.route("/tabel")
-def tabel():
+@app.route("/arbeid", methods=["GET", "POST"])
+def arbeid():
     if 'navn' not in session:
         flash("Vær så snill og login eller register deg før du ser denne siden, den er sensetiv.")
         return redirect(url_for('login'))
     
     navn = session.get('navn')
     admin = session.get('admin')
-    return render_template('tabel.html', navn=navn, admin=admin)
+
+    if request.method == "POST":
+        navn = request.form['navn']
+        passord = request.form['passord']
+        message = request.form['message'] 
+
+        # Henter eller finner brukeren fra databasen
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            SELECT id, navn, AES_DECRYPT(password, %s), role
+            FROM brukere
+            WHERE navn = %s
+        """, (AES_KEY, navn))
+        bruker = cur.fetchone()  # Finner den første medlemen som kyttes til navnet
+        cur.close()
+
+        # bekreft og sjekk brukerens passord
+        if bruker and bruker[2].decode('utf-8') == passord: 
+            cur = mysql.connection.cursor()
+            cur.execute("""
+                INSERT INTO arbeid (navn, messages)
+                VALUES (%s, %s)
+                """, (navn, message)) # %S er values etter navn, epost, passord og enkrypt key
+            mysql.connection.commit()
+            cur.close()
+
+            flash("tusen takk")
+            return redirect(url_for('home'))
+        else:
+            flash("Feil innloggingsdetaljer, vennligst prøv igjen.")
+    return render_template('arbeid.html', navn=navn, admin=admin)
+
+@app.route("/searbeid")
+def searbeid():
+    if 'navn' not in session:
+        flash("Vær så snill og login eller register deg før du ser denne siden, den er sensetiv.")
+        return redirect(url_for('login'))
+    
+    navn = session.get('navn')
+    admin = session.get('admin')
+    return render_template('searbeid.html', navn=navn, admin=admin)
 
 
 @app.route("/Admin")
