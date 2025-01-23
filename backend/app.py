@@ -156,13 +156,13 @@ def arbeid():
         if bruker and bruker[2].decode('utf-8') == passord: 
             cur = mysql.connection.cursor()
             cur.execute("""
-                INSERT INTO arbeid (navn, messages)
-                VALUES (%s, %s)
-                """, (navn, message)) # %S er values etter navn, epost, passord og enkrypt key
+                INSERT INTO arbeid (navn, messages, bruker_id)
+                VALUES (%s, %s, %s)
+            """, (navn, message, bruker[0]))  # bruker[0] is the id from brukere
             mysql.connection.commit()
             cur.close()
 
-            flash("tusen takk")
+            flash("Tusen takk for ditt arbeid, vi vurderer ditt forespørsel og kommer tilbake til deg!")
             return redirect(url_for('home'))
         else:
             flash("Feil innloggingsdetaljer, vennligst prøv igjen.")
@@ -195,4 +195,4 @@ def Admin():
     return render_template("Admin.html", folk=folk, navn=navn, admin=admin)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=4000)

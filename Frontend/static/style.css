@@ -96,3 +96,10 @@ a {
     background-color: rgb(255, 166, 0);
     border-color: rgba(255, 255, 0, 0.552);
 }
+
+.themessage {
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    font-size: 20px;
+}
