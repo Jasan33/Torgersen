@@ -22,7 +22,7 @@
             <a href="{{ url_for('register') }}"><p>Login/Signup</p></a>
             {% endif %}
         <a href="{{ url_for('bestiling') }}"><p>Bestilinger</p></a>
-        <a href="{{ url_for('tabel') }}"><p>Annmeldelser</p></a>
+        <a href="{{ url_for('tabel') }}"><p>Arbeid</p></a>
         <a href="{{ url_for('om_oss') }}"><p>om oss</p></a>
         {% if admin %}
         <a href="{{ url_for('Admin') }}"><p>Admin</p></a>
@@ -40,17 +40,18 @@
     {% endwith %}
         <!-- Form som sammler data til backend vis det er riktig -->
     <div class="login_and_register_main">
-        <h1>Registerer deg her for å bestille bøkker</h1>
+        <h1 class="titele_login">Registerer deg her for å bestille bøkker</h1>
         <form action="{{ url_for('register') }}" method="POST" class="login_and_register_form">
             <label for="navn">Full navn og etternavn:</label>
             <input class="height" type="text" id="navn" name="navn" required><br>
             <label for="passord">Passord:</label>
             <input class="height" type="password" id="passord" name="passord" required><br>
-            <label for="bekreft_passord">bekreft Passord:</label>
+            <label for="bekreft_passord">Bekreft Passord:</label>
             <input class="height" type="password" id="bekreft_passord" name="bekreft_passord" required><br>
             <label for="epost">Epost:</label>
             <input class="height" type="email" id="epost" name="epost" required><br>
-            <button class="submit_button" type="submit">Registerer nå!</button>
+            <button class="submit_button" type="submit">Registerer</button>
+            <button><a class="submit_button" href="{{ url_for('login') }}">Already a member?</a></button>
             <!-- en kort script som sammenligner passord med bekreft passord -->
             <script>
                 const form = document.querySelector("form");
@@ -65,7 +66,6 @@
                 });
             </script>
         </form>
-        <button><a class="login_button" href="{{ url_for('login') }}">allerede en medlem?</a></button>
     </div>
 </body>
 </html>

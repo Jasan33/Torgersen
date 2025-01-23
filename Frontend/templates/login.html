@@ -39,15 +39,15 @@
     {% endif %}
     {% endwith %}
     <div class="login_and_register_main">
-        <h1>Login for å bestille kunnskap</h1>
+        <h1 class="titele_login">Login for å bestille kunnskap</h1>
         <form action="{{ url_for('login') }}" method="POST" class="login_and_register_form">
-            <label for="navn">navn:</label>
+            <label for="navn">Navn:</label>
             <input class="height" type="text" id="navn" name="navn" required><br>
-            <label for="passord">passord:</label>
+            <label for="passord">Passord:</label>
             <input class="height" type="password" id="passord" name="passord" required><br>
             <button class="submit_button" type="submit">Login</button>
+            <button><a class="submit_button" href="{{ url_for('register') }}">Register here!</a></button>
         </form>
-        <a href="{{ url_for('register') }}">Don't have an account!?</a>
     </div>
 </body>
 </html>
