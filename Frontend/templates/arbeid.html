@@ -39,10 +39,10 @@
     {% endif %}
     {% endwith %}
         <!-- Her kan en bruker skrive inn arbeid de ønsker -->
-    <div class="valg">
-        <button><a class="submit_button" href="{{ url_for('arbeid') }}">Skriv en arbeid</a></button>
-        <button><a class="submit_button" href="{{ url_for('searbeid') }}">Se arbeid</a></button>
-    </div>
+        <div class="valg">
+            <button><a class="submit_button" href="{{ url_for('arbeid') }}">Skriv en arbeid</a></button>
+            <button><a class="submit_button" href="{{ url_for('searbeid') }}">Se arbeid</a></button>
+        </div>
     <div class="login_and_register_main">
         <h1 class="titele_login">Her kan du oppgi et arbeid som du ønsker, svar på skjema under</h1>
         <form action="{{ url_for('arbeid') }}" method="POST" class="login_and_register_form">

@@ -149,7 +149,7 @@ def arbeid():
             FROM brukere
             WHERE navn = %s
         """, (AES_KEY, navn))
-        bruker = cur.fetchone()  # Finner den første medlemen som kyttes til navnet
+        bruker = cur.fetchone()  # Her finner den første medlemen som kyttes til navnet
         cur.close()
 
         # bekreft og sjekk brukerens passord
@@ -158,7 +158,7 @@ def arbeid():
             cur.execute("""
                 INSERT INTO arbeid (navn, messages, bruker_id)
                 VALUES (%s, %s, %s)
-            """, (navn, message, bruker[0]))  # bruker[0] is the id from brukere
+            """, (navn, message, bruker[0]))  # bruker[0] er id fra brukere databasen
             mysql.connection.commit()
             cur.close()
 
@@ -174,9 +174,14 @@ def searbeid():
         flash("Vær så snill og login eller register deg før du ser denne siden, den er sensetiv.")
         return redirect(url_for('login'))
     
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT created_at, navn, messages FROM arbeid ORDER BY created_at")
+    informasjon = cur.fetchall()
+    cur.close()
+    
     navn = session.get('navn')
     admin = session.get('admin')
-    return render_template('searbeid.html', navn=navn, admin=admin)
+    return render_template('searbeid.html', navn=navn, admin=admin, informasjon=informasjon)
 
 
 @app.route("/Admin")

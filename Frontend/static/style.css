@@ -45,12 +45,31 @@ a {
     gap: 100px;
 }
 
+.main_leaderboard {
+    margin-top: 30px;
+}
 .Adminboard {
     margin: 2%;
     font-size: 25px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.Bestilingboard {
+    margin: 2%;
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tidnavn {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 200px;
 }
 
 .login_button {

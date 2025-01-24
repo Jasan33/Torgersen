@@ -42,5 +42,19 @@
         <button><a class="submit_button" href="{{ url_for('arbeid') }}">Skriv en arbeid</a></button>
         <button><a class="submit_button" href="{{ url_for('searbeid') }}">Se arbeid</a></button>
     </div>
+    <div class="main_leaderboard">
+      {% for arbeid in informasjon %}
+      <hr>
+      <div class="Bestilingboard">
+        <div class="tidnavn">
+          <p>{{ arbeid[0] }}</p>
+          <p>{{ arbeid[1] }}</p>
+        </div>
+        <p>Bestiling: <br> {{ arbeid[2] }}</p>
+      </div>
+      {% endfor %}
+      <hr>
+      <hr>
+  </div>
 </body>
 </html>
