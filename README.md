@@ -7,3 +7,7 @@
 ## who is Torgersen:
 Torgersen also known as Geir Petter Torgersen is a Norwegian man who translates outer books to the Norwegian language.
 these are all types of books from fantasy, action, and other
+
+
+## About the website:
+This website is avalible using flask python and backend mysql database
